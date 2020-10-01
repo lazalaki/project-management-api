@@ -15,4 +15,6 @@ use App\Http\Controllers\Auth\UsersController;
 |
 */
 
+
 Route::post('/onboarding/register', [UsersController::class, 'register']);
+Route::post('/onboarding/login', [UsersController::class, 'login']);

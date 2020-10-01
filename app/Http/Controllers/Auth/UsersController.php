@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Services\Auth\UserService;
+use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
-use App\Services\Auth\UserService;
 
 class UsersController extends Controller
 {
@@ -23,5 +24,14 @@ class UsersController extends Controller
         $credientals = $request->only('name', 'email', 'password');
 
         return $this->userService->register($credientals);
+    }
+
+
+
+    public function login(LoginRequest $request)
+    {
+        $credientals = $request->only('email', 'password');
+
+        return $this->userService->login($credientals);
     }
 }

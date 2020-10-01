@@ -23,4 +23,19 @@ class UserService
             return response()->json($e->getMessage());
         }
     }
+
+
+
+    public function login(array $userData)
+    {
+        $user = auth()->attempt($userData);
+
+        if (!$user) {
+            throw new \Exception('Bad credientals. Please try again.');
+        }
+
+        return response()->json([
+            'user' => auth()->user()
+        ]);
+    }
 }
