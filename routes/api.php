@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\Auth\UsersController;
 
 /*
@@ -15,6 +16,8 @@ use App\Http\Controllers\Auth\UsersController;
 |
 */
 
-
-Route::post('/onboarding/register', [UsersController::class, 'register']);
-Route::post('/onboarding/login', [UsersController::class, 'login']);
+Route::middleware('api')->prefix('auth')->group(function () {
+    Route::post('register', [UsersController::class, 'register']);
+    Route::post('login', [UsersController::class, 'login']);
+});
+Route::get('projects/{user}', [ProjectsController::class, 'getProjectsForGivenUser'])->middleware('auth.role:admin');

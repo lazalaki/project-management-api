@@ -21,7 +21,7 @@ class UsersController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $credientals = $request->only('name', 'email', 'password');
+        $credientals = $request->only('username', 'email', 'password');
 
         return $this->userService->register($credientals);
     }
@@ -30,6 +30,7 @@ class UsersController extends Controller
 
     public function login(LoginRequest $request)
     {
+
         $credientals = $request->only('email', 'password');
 
         return $this->userService->login($credientals);

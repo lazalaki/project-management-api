@@ -4,6 +4,7 @@
 namespace App\Services\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
@@ -11,7 +12,7 @@ class UserService
     public function register(array $userData)
     {
         $user = new User();
-        $user->name = $userData['name'];
+        $user->username = $userData['username'];
         $user->email = $userData['email'];
         $user->password = bcrypt($userData['password']);
 
@@ -19,7 +20,6 @@ class UserService
             $user->save();
             return response()->json([], 200);
         } catch (\Exception $e) {
-            dd($e);
             return response()->json($e->getMessage());
         }
     }
@@ -28,13 +28,15 @@ class UserService
 
     public function login(array $userData)
     {
-        $user = auth()->attempt($userData);
+        $token = auth()->attempt($userData);
 
-        if (!$user) {
+        if (!$token) {
             throw new \Exception('Bad credientals. Please try again.');
         }
 
+
         return response()->json([
+            'token' => $token,
             'user' => auth()->user()
         ]);
     }
