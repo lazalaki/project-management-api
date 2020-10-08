@@ -34,7 +34,6 @@ class UserService
             throw new \Exception('Bad credientals. Please try again.');
         }
 
-
         return response()->json([
             'token' => $token,
             'user' => auth()->user()

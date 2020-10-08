@@ -16,8 +16,29 @@ use App\Http\Controllers\Auth\UsersController;
 |
 */
 
-Route::middleware('api')->prefix('auth')->group(function () {
+//API ROUTES
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function () {
     Route::post('register', [UsersController::class, 'register']);
     Route::post('login', [UsersController::class, 'login']);
 });
-Route::get('projects/{user}', [ProjectsController::class, 'getProjectsForGivenUser'])->middleware('auth.role:admin');
+
+
+
+//ADMIN ROUTES
+Route::group([
+    'middleware' => 'auth.role:admin'
+], function () {
+    Route::post('/projects/create', [ProjectsController::class, 'createProject']);
+});
+
+
+
+//ALL ROLES ROUTES
+Route::group([
+    'middleware' => 'auth'
+], function () {
+    Route::get('projects/{user}', [ProjectsController::class, 'getProjectsForGivenUser']);
+});
