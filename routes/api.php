@@ -41,4 +41,5 @@ Route::group([
     'middleware' => 'auth'
 ], function () {
     Route::get('projects/{user}', [ProjectsController::class, 'getProjectsForGivenUser']);
+    Route::get('projects/project/{projectId}', [ProjectsController::class, 'getProjectById']);
 });

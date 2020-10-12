@@ -28,4 +28,10 @@ class ProjectsController extends Controller
     {
         return $this->projectService->createProject($request->validated());
     }
+
+
+    public function getProjectById($projectId)
+    {
+        return $this->projectService->getProjectById($projectId);
+    }
 }

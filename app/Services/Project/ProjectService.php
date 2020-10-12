@@ -3,17 +3,20 @@
 
 namespace App\Services\Project;
 
+use App\Models\Project;
 
 class ProjectService
 {
     public function getAllProjects($user)
     {
         try {
-            $projects = $user->projects;
+            // $projects = Project::where('owner_id', $user->id)->latest()->get();
+
+            $projects = $user->projects()->latest()->get();
 
             return response()->json([
                 'projects' => $projects
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }
@@ -24,6 +27,19 @@ class ProjectService
     {
         try {
             $project = auth()->user()->projects()->create($projectData);
+
+            return response()->json([
+                'project' => $project
+            ]);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+    public function getProjectById($projectId)
+    {
+        try {
+            $project = Project::findOrFail($projectId);
 
             return response()->json([
                 'project' => $project
