@@ -32,6 +32,7 @@ Route::group([
     'middleware' => 'auth.role:admin'
 ], function () {
     Route::post('/projects/create', [ProjectsController::class, 'createProject']);
+    Route::post('/projects/{project}', [ProjectsController::class, 'deleteProject']);
 });
 
 

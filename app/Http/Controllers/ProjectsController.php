@@ -34,4 +34,12 @@ class ProjectsController extends Controller
     {
         return $this->projectService->getProjectById($projectId);
     }
+
+
+    public function deleteProject(Project $project)
+    {
+        $this->authorize('delete', $project);
+
+        return $this->projectService->deleteProject($project->id);
+    }
 }

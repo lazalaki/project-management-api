@@ -48,4 +48,18 @@ class ProjectService
             return response()->json($e->getMessage());
         }
     }
+
+
+    public function deleteProject($projectId)
+    {
+        try {
+            $project = Project::findOrFail($projectId);
+
+            $project->delete();
+
+            return response()->json([], 200);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
 }
