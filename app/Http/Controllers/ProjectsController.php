@@ -38,8 +38,6 @@ class ProjectsController extends Controller
 
     public function deleteProject(Project $project)
     {
-        $this->authorize('delete', $project);
-
         return $this->projectService->deleteProject($project->id);
     }
 }

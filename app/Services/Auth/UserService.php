@@ -5,6 +5,7 @@ namespace App\Services\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class UserService
 {
@@ -38,5 +39,21 @@ class UserService
             'token' => $token,
             'user' => auth()->user()
         ]);
+    }
+
+
+
+    public function updateRole(array $userEmails)
+    {
+        try {
+            if (Gate::allows('isSuperAdmin')) {
+                foreach ($userEmails as $email) {
+                    User::where('email', $email)->update(['role' => 'admin']);
+                }
+            }
+            return response()->json([], 200);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
     }
 }

@@ -26,21 +26,30 @@ Route::group([
 });
 
 
-
-//ADMIN ROUTES
-Route::group([
-    'middleware' => 'auth.role:admin'
-], function () {
-    Route::post('/projects/create', [ProjectsController::class, 'createProject']);
-    Route::post('/projects/{project}', [ProjectsController::class, 'deleteProject']);
-});
-
-
-
 //ALL ROLES ROUTES
 Route::group([
     'middleware' => 'auth'
 ], function () {
     Route::get('projects/{user}', [ProjectsController::class, 'getProjectsForGivenUser']);
     Route::get('projects/project/{projectId}', [ProjectsController::class, 'getProjectById']);
+});
+
+
+
+//SUPERADMIN ROUTES
+Route::group([
+    'middleware' => 'auth.role:superAdmin'
+], function () {
+    Route::get('/users', [UsersController::class, 'getUsers']);
+    Route::post('/users', [UsersController::class, 'updateRole']);
+});
+
+
+
+//ADMIN ROUTES
+Route::group([
+    'middleware' => 'auth.role:admin|superAdmin'
+], function () {
+    Route::post('/projects/create', [ProjectsController::class, 'createProject']);
+    Route::post('/projects/{project}', [ProjectsController::class, 'deleteProject']);
 });

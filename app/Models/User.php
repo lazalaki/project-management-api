@@ -56,4 +56,15 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Project::class, 'owner_id');
     }
+
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->role === 'superAdmin';
+    }
 }
