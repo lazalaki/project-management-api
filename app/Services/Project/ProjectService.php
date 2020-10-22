@@ -4,6 +4,7 @@
 namespace App\Services\Project;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
 class ProjectService
@@ -69,6 +70,23 @@ class ProjectService
                 return response()->json([], 200);
             }
             return response()->json('Unauthorized for this action');
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+
+
+    public function addUserToProject($project, $email)
+    {
+        try {
+            if (Gate::allows('isAdmin')) {
+                $user = User::whereEmail($email)->first();
+
+                $project->invite($user);
+
+                return response()->json([], 200);
+            };
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }

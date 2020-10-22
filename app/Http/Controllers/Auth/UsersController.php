@@ -52,6 +52,6 @@ class UsersController extends Controller
 
     public function updateRole(Request $request)
     {
-        return $this->userService->updateRole($request->users);
+        return $this->userService->updateRole($request->all());
     }
 }

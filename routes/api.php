@@ -41,15 +41,16 @@ Route::group([
     'middleware' => 'auth.role:superAdmin'
 ], function () {
     Route::get('/users', [UsersController::class, 'getUsers']);
-    Route::post('/users', [UsersController::class, 'updateRole']);
+    Route::post('/users/{user}', [UsersController::class, 'updateRole']);
 });
 
 
 
-//ADMIN ROUTES
+//ADMIN AND SUPERADMIN ROUTES
 Route::group([
-    'middleware' => 'auth.role:admin|superAdmin'
+    'middleware' => 'auth.role:admin,superAdmin'
 ], function () {
     Route::post('/projects/create', [ProjectsController::class, 'createProject']);
     Route::post('/projects/{project}', [ProjectsController::class, 'deleteProject']);
+    Route::post('/projects/{project}/invitation', [ProjectsController::class, 'addUserToProject']);
 });

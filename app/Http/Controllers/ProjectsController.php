@@ -40,4 +40,10 @@ class ProjectsController extends Controller
     {
         return $this->projectService->deleteProject($project->id);
     }
+
+
+    public function addUserToProject(Project $project, Request $request)
+    {
+        return $this->projectService->addUserToProject($project, $request->email);
+    }
 }

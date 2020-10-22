@@ -41,7 +41,7 @@ class ProjectPolicy
      */
     public function create(User $user)
     {
-        return $user->isAdmin();
+        return $user->isAdmin() || $user->isSuperAdmin();
     }
 
     /**
@@ -63,7 +63,7 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $project)
     {
-        return $user->isAdmin();
+        return $user->isAdmin() || $user->isSuperAdmin();
     }
 
     /**

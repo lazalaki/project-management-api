@@ -4,7 +4,6 @@
 namespace App\Services\Auth;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class UserService
@@ -43,13 +42,11 @@ class UserService
 
 
 
-    public function updateRole(array $userEmails)
+    public function updateRole($userData)
     {
         try {
-            if (Gate::allows('isSuperAdmin')) {
-                foreach ($userEmails as $email) {
-                    User::where('email', $email)->update(['role' => 'admin']);
-                }
+            if ($userData && Gate::allows('isSuperAdmin')) {
+                User::where('id', $userData['id'])->update(['role' => $userData['role']['role']]);
             }
             return response()->json([], 200);
         } catch (\Exception $e) {
