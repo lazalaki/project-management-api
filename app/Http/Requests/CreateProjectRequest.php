@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Project;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class CreateProjectRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class CreateProjectRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Gate::allows('isAdmin', new Project());
     }
 
     /**

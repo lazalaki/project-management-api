@@ -30,7 +30,7 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project)
     {
-        //
+        return $user->is($project->owner) || $project->members->contains($user);
     }
 
     /**
@@ -52,7 +52,9 @@ class ProjectPolicy
      * @return mixed
      */
     public function update(User $user, Project $project)
-    { }
+    {
+        return $user->is($project->owner);
+    }
 
     /**
      * Determine whether the user can delete the model.
@@ -63,7 +65,7 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $project)
     {
-        return $user->isAdmin() || $user->isSuperAdmin();
+        return $user->id === $project->owner_id;
     }
 
     /**

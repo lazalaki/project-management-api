@@ -12,8 +12,7 @@ class ProjectService
     public function getAllProjects($user)
     {
         try {
-            // $projects = Project::where('owner_id', $user->id)->latest()->get();
-            $projects = $user->projects()->latest()->get();
+            $projects = $user->accessibleProjects();
 
             return response()->json([
                 'projects' => $projects
@@ -29,13 +28,11 @@ class ProjectService
     public function createProject($projectData)
     {
         try {
-            if (Gate::allows('create', Project::class)) {
-                $project = auth()->user()->projects()->create($projectData);
+            $project = auth()->user()->projects()->create($projectData);
 
-                return response()->json([
-                    'project' => $project
-                ]);
-            }
+            return response()->json([
+                'project' => $project
+            ]);
             return response()->json('Unauthorized for this action');
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
@@ -47,8 +44,8 @@ class ProjectService
     public function getProjectById($projectId)
     {
         try {
-            $project = Project::findOrFail($projectId);
-
+            $project = Project::findOrFail($projectId)->load(['owner', 'members']);
+            // dd($project);
             return response()->json([
                 'project' => $project
             ]);
@@ -77,16 +74,42 @@ class ProjectService
 
 
 
-    public function addUserToProject($project, $email)
+    public function addMemberToProject($project, $email)
     {
         try {
             if (Gate::allows('isAdmin')) {
                 $user = User::whereEmail($email)->first();
 
+                if ($user == null) {
+                    return response()->json(['error' => 'User with this email does not exist']);
+                }
+
+                if ($project->members->contains($user)) {
+                    return response()->json(['error' => 'User with this email is already added']);
+                }
+
                 $project->invite($user);
 
                 return response()->json([], 200);
             };
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+
+
+    public function updateProject($project)
+    {
+
+        try {
+            $project->update(request()->validate([
+                'title' => 'sometimes|required',
+                'description' => 'sometimes|required',
+                'notes' => 'nullable'
+            ]));
+
+            return response()->json([], 200);
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }

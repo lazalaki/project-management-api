@@ -32,18 +32,32 @@ class ProjectsController extends Controller
 
     public function getProjectById($projectId)
     {
+        $this->authorize('view', Project::where('id', $projectId)->first());
+
         return $this->projectService->getProjectById($projectId);
     }
 
 
     public function deleteProject(Project $project)
     {
+        $this->authorize('delete', $project);
+
         return $this->projectService->deleteProject($project->id);
     }
 
 
-    public function addUserToProject(Project $project, Request $request)
+    public function addMemberToProject(Project $project, Request $request)
     {
-        return $this->projectService->addUserToProject($project, $request->email);
+        return $this->projectService->addMemberToProject($project, $request->email);
+    }
+
+
+    public function updateProject(Project $project)
+    {
+
+        $this->authorize('update', $project);
+
+
+        return $this->projectService->updateProject($project);
     }
 }

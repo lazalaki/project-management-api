@@ -67,4 +67,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->role === 'superAdmin';
     }
+
+
+    public function accessibleProjects()
+    {
+        return Project::where('owner_id', $this->id)
+            ->orWhereHas('members', function ($query) {
+                $query->where('user_id', $this->id);
+            })->get();
+    }
 }

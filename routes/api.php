@@ -52,5 +52,6 @@ Route::group([
 ], function () {
     Route::post('/projects/create', [ProjectsController::class, 'createProject']);
     Route::post('/projects/{project}', [ProjectsController::class, 'deleteProject']);
-    Route::post('/projects/{project}/invitation', [ProjectsController::class, 'addUserToProject']);
+    Route::post('/projects/{project}/invitation', [ProjectsController::class, 'addMemberToProject']);
+    Route::patch('/projects/{project}/update', [ProjectsController::class, 'updateProject']);
 });
