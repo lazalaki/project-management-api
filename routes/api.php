@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\Auth\UsersController;
+use App\Http\Controllers\TasksController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +22,8 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function () {
-    Route::post('register', [UsersController::class, 'register']);
-    Route::post('login', [UsersController::class, 'login']);
+    Route::post('/register', [UsersController::class, 'register']);
+    Route::post('/login', [UsersController::class, 'login']);
 });
 
 
@@ -30,8 +31,9 @@ Route::group([
 Route::group([
     'middleware' => 'auth'
 ], function () {
-    Route::get('projects/{user}', [ProjectsController::class, 'getProjectsForGivenUser']);
-    Route::get('projects/project/{projectId}', [ProjectsController::class, 'getProjectById']);
+    Route::get('/users/projects/{user}', [ProjectsController::class, 'getProjectsForGivenUser']);
+    Route::get('/projects/{projectId}', [ProjectsController::class, 'getProjectById']);
+    Route::get('/projects/{project}/tasks', [TasksController::class, 'getAllTasks']);
 });
 
 
@@ -54,4 +56,5 @@ Route::group([
     Route::post('/projects/{project}', [ProjectsController::class, 'deleteProject']);
     Route::post('/projects/{project}/invitation', [ProjectsController::class, 'addMemberToProject']);
     Route::patch('/projects/{project}/update', [ProjectsController::class, 'updateProject']);
+    Route::post('/projects/{project}/tasks/create', [TasksController::class, 'createTask']);
 });

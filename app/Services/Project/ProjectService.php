@@ -45,7 +45,6 @@ class ProjectService
     {
         try {
             $project = Project::findOrFail($projectId)->load(['owner', 'members']);
-            // dd($project);
             return response()->json([
                 'project' => $project
             ]);
