@@ -6,7 +6,6 @@ use App\Http\Requests\TaskRequest;
 use App\Models\Project;
 use App\Models\Task;
 use App\Services\Task\TaskService;
-use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
@@ -27,5 +26,11 @@ class TasksController extends Controller
     public function createTask(Project $project, TaskRequest $request)
     {
         return $this->taskService->createTask($project, $request);
+    }
+
+
+    public function updateStatus(Project $project, Task $task)
+    {
+        return $this->taskService->updateStatus($project, $task);
     }
 }

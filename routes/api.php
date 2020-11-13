@@ -34,6 +34,7 @@ Route::group([
     Route::get('/users/projects/{user}', [ProjectsController::class, 'getProjectsForGivenUser']);
     Route::get('/projects/{projectId}', [ProjectsController::class, 'getProjectById']);
     Route::get('/projects/{project}/tasks', [TasksController::class, 'getAllTasks']);
+    Route::patch('/projects/{project}/tasks/{task}', [TasksController::class, 'updateStatus']);
 });
 
 
@@ -53,7 +54,7 @@ Route::group([
     'middleware' => 'auth.role:admin,superAdmin'
 ], function () {
     Route::post('/projects/create', [ProjectsController::class, 'createProject']);
-    Route::post('/projects/{project}', [ProjectsController::class, 'deleteProject']);
+    Route::post('/projects/{project}/delete', [ProjectsController::class, 'deleteProject']);
     Route::post('/projects/{project}/invitation', [ProjectsController::class, 'addMemberToProject']);
     Route::patch('/projects/{project}/update', [ProjectsController::class, 'updateProject']);
     Route::post('/projects/{project}/tasks/create', [TasksController::class, 'createTask']);

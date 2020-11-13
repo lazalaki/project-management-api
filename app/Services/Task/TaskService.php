@@ -2,7 +2,7 @@
 
 namespace App\Services\Task;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 
 class TaskService
@@ -25,16 +25,37 @@ class TaskService
     public function createTask($project, $request)
     {
         try {
-            $user = DB::table('users')->where('email', $request['email'])->first();
+            $user = User::where('email', $request['email'])->first();
+            if (!$project->members->contains($user)) {
+                return response()->json('User with this email is not on this project');
+            }
 
             $task = $project->tasks()->create([
                 'title' => $request['title'],
                 'description' => $request['description'],
                 'user_id' => $user->id
             ]);
+
             return response()->json([
                 'task' => $task
             ], 200);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage());
+        }
+    }
+
+
+    public function updateStatus($project, $task)
+    {
+        if (!Gate::allows('canUpdateTask', [$project, $task])) {
+            return response()->json(['error' => 'You are not assigned to this task']);
+        };
+
+        try {
+            $task->update([
+                'status' => request('status')
+            ]);
+            return $task;
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
         }

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Project;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -38,6 +39,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('containsUser', function (User $user, Project $project) {
             return $user->is($project->owner) || $project->members->contains($user);
+        });
+
+        Gate::define('canUpdateTask', function (User $user, Project $project, Task $task) {
+            return $user->is($project->owner) || $user->id == $task->user_id;
         });
     }
 }

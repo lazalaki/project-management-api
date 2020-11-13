@@ -61,10 +61,10 @@ class ProjectService
         try {
             $project = Project::findOrFail($projectId);
 
-            if (Gate::allows('delete', $project)) {
-                $project->delete();
-                return response()->json([], 200);
-            }
+            // if (Gate::allows('delete', $project)) {
+            $project->delete();
+            return response()->json([], 200);
+            // }
             return response()->json('Unauthorized for this action');
         } catch (\Exception $e) {
             return response()->json($e->getMessage());
